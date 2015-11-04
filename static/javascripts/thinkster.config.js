@@ -2,7 +2,7 @@
  * Created by ose on 11/4/2015.
  */
 (function () {
-    'use_strict';
+    'use strict';
 
     angular
         .module('thinkster.config')

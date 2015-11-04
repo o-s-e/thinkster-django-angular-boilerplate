@@ -1,14 +1,13 @@
 import json
 
-from rest_framework import permissions, viewsets
-from rest_framework import status, views
+from rest_framework import permissions, viewsets, status, views
 from rest_framework.response import Response
 
 from authentication.models import Account
 from authentication.permissions import IsAccountOwner
 from authentication.serializers import AccountSerializer
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -65,3 +64,12 @@ class LoginView(views.APIView):
                 'status' : 'Unauthorized',
                 'message': 'Username/password combination invalid.'
             }, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class LogoutView(views.APIView):
+    permissions_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        logout(request)
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
