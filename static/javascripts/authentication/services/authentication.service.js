@@ -13,7 +13,7 @@
 
     /**
      * @namespace Authentication
-     * @returns {Factory}
+     * @returns {{register: thinkster.authentication.services.Authentication.register}}
      */
     function Authentication($cookies, $http) {
         /**
@@ -34,7 +34,7 @@
          * @param {string} username The username entered by the user
          * @param {string} password The password entered by the user
          * @param {string} email The email entered by the user
-         * @returns {Promise}
+         * @returns {HttpPromise}
          * @memberOf thinkster.authentication.services.Authentication
          */
         function register(email, password, username) {
