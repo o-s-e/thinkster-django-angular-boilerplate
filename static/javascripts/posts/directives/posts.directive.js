@@ -18,7 +18,7 @@
         /**
          * @name directive
          * @desc The directive to be returned
-         * @memberOf thinkster.posts.directives.Posts
+         * @memberOf thinkster.posts.directives.posts
          */
         var directive = {
             controller: 'PostsController',
