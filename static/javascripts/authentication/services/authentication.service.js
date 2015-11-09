@@ -21,11 +21,11 @@
          * @desc The Factory to be returned
          */
         var Authentication = {
-            getAuthenticatedAccount: getAuthenticatedAccount,
             isAuthenticated: isAuthenticated,
+            register: register,
             login: login,
             logout: logout,
-            register: register,
+            getAuthenticatedAccount: getAuthenticatedAccount,
             setAuthenticatedAccount: setAuthenticatedAccount,
             unauthenticate: unauthenticate
         };
@@ -40,7 +40,7 @@
          * @param {string} username The username entered by the user
          * @param {string} password The password entered by the user
          * @param {string} email The email entered by the user
-         * @returns {HttpPromise}
+         * @returns {angular.IPromise<TResult>}
          * @memberOf thinkster.authentication.services.Authentication
          */
         function register(email, password, username) {
@@ -48,7 +48,23 @@
                 username: username,
                 password: password,
                 email: email
-            });
+            }).then(registerSuccessFn, registerErrorFn);
+
+            /**
+             * @name registerSuccessFn
+             * @desc Log the new user in
+             */
+            function registerSuccessFn(data, status, headers, config) {
+                Authentication.login(email, password);
+            }
+
+            /**
+             * @name registerErrorFn
+             * @desc Log "Epic failure!" to the console
+             */
+            function registerErrorFn(data, status, headers, config) {
+                console.error('Epic failure!');
+            }
         }
 
         /**
@@ -56,12 +72,13 @@
          * @desc Try to log in with email `email` and password `password`
          * @param {string} email The email entered by the user
          * @param {string} password The password entered by the user
-         * @returns {Promise}
+         * @returns {angular.IPromise<TResult>}
          * @memberOf thinkster.authentication.services.Authentication
          */
         function login(email, password) {
             return $http.post('/api/v1/auth/login/', {
-                email: email, password: password
+                email: email,
+                password: password
             }).then(loginSuccessFn, loginErrorFn);
 
             /**
@@ -131,7 +148,7 @@
         /**
          * @name logout
          * @desc Try to log the user out
-         * @returns {HttpPromise}
+         * @returns {angular.IPromise<TResult>}
          * @memberOf thinkster.authentication.services.Authentication
          */
         function logout() {
