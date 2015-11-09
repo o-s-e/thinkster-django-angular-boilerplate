@@ -1,12 +1,9 @@
 /**
- * Created by ose on 11/9/2015.
- */
-/**
  * PostsController
  * @namespace thinkster.posts.controllers
  */
 (function () {
-    "use strict";
+    'use strict';
 
     angular
         .module('thinkster.posts.controllers')
@@ -18,10 +15,12 @@
      * @namespace PostsController
      */
     function PostsController($scope) {
-        var vm = this
+        var vm = this;
 
-        vm.colums = [];
+        vm.columns = [];
+
         activate();
+
 
         /**
          * @name activate
@@ -37,13 +36,14 @@
             }, render);
         }
 
+
         /**
          * @name calculateNumberOfColumns
          * @desc Calculate number of columns based on screen width
          * @returns {Number} The number of columns containing Posts
-         * @memberOf thinkster.posts.controllers.PostsControllers
+         * @memberOf thinkster.posts.controllers.PostsController
          */
-        function calculateNumberOfColums() {
+        function calculateNumberOfColumns() {
             var width = $(window).width();
 
             if (width >= 1200) {
@@ -57,16 +57,18 @@
             }
         }
 
+
         /**
          * @name approximateShortestColumn
          * @desc An algorithm for approximating which column is shortest
-         * @returns The index of the shortest column
+         * @returns number index of the shortest column
          * @memberOf thinkster.posts.controllers.PostsController
          */
         function approximateShortestColumn() {
-            var scores = vm.colums.map(columnMapFn);
+            var scores = vm.columns.map(columnMapFn);
 
             return scores.indexOf(Math.min.apply(this, scores));
+
 
             /**
              * @name columnMapFn
@@ -74,12 +76,13 @@
              * @returns number approximately normalized height of a given column
              */
             function columnMapFn(column) {
-                var lenghts = column.map(function (element) {
+                var lengths = column.map(function (element) {
                     return element.content.length;
                 });
 
-                return lenghts.reduce(sum, 0) * column.length;
+                return lengths.reduce(sum, 0) * column.length;
             }
+
 
             /**
              * @name sum
@@ -93,6 +96,7 @@
             }
         }
 
+
         /**
          * @name render
          * @desc Renders Posts into columns of approximately equal height
@@ -102,12 +106,16 @@
          */
         function render(current, original) {
             if (current !== original) {
-                vm.colums = [];
+                vm.columns = [];
+
+                for (var i = 0; i < calculateNumberOfColumns(); ++i) {
+                    vm.columns.push([]);
+                }
 
                 for (var i = 0; i < current.length; ++i) {
                     var column = approximateShortestColumn();
 
-                    vm.colums[column.push(current[i])];
+                    vm.columns[column].push(current[i]);
                 }
             }
         }
